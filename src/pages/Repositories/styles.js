@@ -31,6 +31,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     margin: metrics.baseMargin,
   },
+
+  error: {
+    color: colors.danger,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 });
 
 export default styles;

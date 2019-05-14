@@ -2,14 +2,22 @@ import React from 'react';
 
 import { View, Text, Image } from 'react-native';
 import PropTypes from 'prop-types';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-// import { Container } from './styles';
+import styles from './styles';
 
 const RepositoryItem = ({ repository }) => (
-  <View>
-    <Image source={{ url: repository.owner.avatar_url }} />
-    <Text>{repository.name}</Text>
-    <Text>{repository.owner.login}</Text>
+  <View style={styles.constainer}>
+    <Image style={styles.avatar} source={{ url: repository.owner.avatar_url }} />
+
+    <View style={styles.info}>
+      <Text style={styles.name}>{repository.name}</Text>
+      <Text style={styles.login}>{repository.owner.login}</Text>
+    </View>
+
+    <Text style={styles.icon}>
+      <Icon name="angle-right" size={24} />
+    </Text>
   </View>
 );
 

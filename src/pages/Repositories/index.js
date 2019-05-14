@@ -17,20 +17,34 @@ class Repositories extends Component {
     repositoryInput: '',
     repositories: [],
     loading: false,
+    refreshing: false,
+    errorMessage: '',
   };
 
   async componentDidMount() {
-    this.setState({ loading: true });
-
-    this.setState({ loading: false, repositories: await this.getLocalRepositories() });
+    this.loadRepositories();
   }
 
+  loadRepositories = async () => {
+    this.setState({ refreshing: true });
+
+    this.setState({ refreshing: false, repositories: await this.getLocalRepositories() });
+  };
+
   getRepository = async () => {
-    this.setState({ loading: true });
+    this.setState({ loading: true, errorMessage: '' });
     const { repositories, repositoryInput } = this.state;
 
     try {
       const { data } = await api.get(`/repos/${repositoryInput}`);
+
+      const repository = repositories.filter(repo => repo.id === data.id);
+      console.tron.log(repository);
+
+      if (repository.length > 0) {
+        this.setState({ errorMessage: 'Repositório já existe' });
+        return;
+      }
 
       this.setState({
         repositoryInput: '',
@@ -42,7 +56,9 @@ class Repositories extends Component {
 
       this.setLocalRepositories([...localRepositories, data]);
     } catch (error) {
-      console.tron.log(error);
+      this.setState({ errorMessage: 'Repositório não encontrado' });
+    } finally {
+      this.setState({ loading: false });
     }
   };
 
@@ -53,13 +69,15 @@ class Repositories extends Component {
   };
 
   renderRepositories = () => {
-    const { repositories } = this.state;
+    const { repositories, refreshing } = this.state;
 
     return (
       <FlatList
-        keyExtractor={item => item.id}
+        keyExtractor={item => String(item.id)}
         data={repositories}
         renderItem={this.renderListItem}
+        onRefresh={this.loadRepositories}
+        refreshing={refreshing}
       />
     );
   };
@@ -67,7 +85,7 @@ class Repositories extends Component {
   renderListItem = ({ item }) => <RepositoryItem repository={item} />;
 
   render() {
-    const { repositoryInput, loading } = this.state;
+    const { repositoryInput, loading, errorMessage } = this.state;
 
     return (
       <View style={styles.container}>
@@ -88,6 +106,8 @@ class Repositories extends Component {
             {loading ? <ActivityIndicator /> : <Icon name="plus" size={24} />}
           </TouchableOpacity>
         </View>
+
+        {!!errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
 
         <View style={styles.separator} />
 
