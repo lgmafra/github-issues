@@ -7,12 +7,15 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import api from '~/services/api';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import Header from '~/components/Header';
 import RepositoryItem from '~/pages/Repositories/RepositoryItem';
 
 import styles from './styles';
 
 class Repositories extends Component {
+  static navigationOptions = {
+    title: 'GitIssues',
+  };
+
   state = {
     repositoryInput: '',
     repositories: [],
@@ -39,7 +42,6 @@ class Repositories extends Component {
       const { data } = await api.get(`/repos/${repositoryInput}`);
 
       const repository = repositories.filter(repo => repo.id === data.id);
-      console.tron.log(repository);
 
       if (repository.length > 0) {
         this.setState({ errorMessage: 'Repositório já existe' });
@@ -89,8 +91,6 @@ class Repositories extends Component {
 
     return (
       <View style={styles.container}>
-        <Header title="GitIssues" />
-
         <View style={styles.form}>
           <TextInput
             style={styles.input}
