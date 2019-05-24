@@ -14,15 +14,17 @@ const styles = StyleSheet.create({
   avatar: {
     height: 50,
     width: 50,
+    borderRadius: 25,
   },
   info: {
     marginLeft: metrics.baseMargin * 2,
     flex: 1,
   },
-  name: {
+  title: {
     fontSize: 20,
     fontWeight: 'bold',
     color: colors.darker,
+    marginRight: metrics.baseMargin,
   },
   login: {
     color: colors.darkTransparent,

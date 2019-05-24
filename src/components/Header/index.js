@@ -1,24 +1,46 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-import { View, Text, StatusBar } from 'react-native';
+import {
+  View, Text, StatusBar, TouchableOpacity,
+} from 'react-native';
 import PropTypes from 'prop-types';
+import { withNavigation } from 'react-navigation';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import styles from './styles';
 
-const Header = ({ title }) => (
-  <View style={styles.container}>
-    <StatusBar barStyle="dark-content" />
+class Header extends Component {
+  static propTypes = {
+    title: PropTypes.string.isRequired,
+  };
 
-    <View style={styles.left} />
-    <View style={styles.title}>
-      <Text>{title}</Text>
-    </View>
-    <View style={styles.right} />
-  </View>
-);
+  backPage = () => {};
 
-Header.propTypes = {
-  title: PropTypes.string.isRequired,
-};
+  render() {
+    const { title } = this.props;
+    const {
+      state: { params },
+      navigate,
+    } = this.props.navigation;
 
-export default Header;
+    return (
+      <View style={styles.container}>
+        <StatusBar barStyle="dark-content" />
+
+        <View style={styles.left}>
+          {!!params && (
+            <TouchableOpacity onPress={() => navigate('Repositories')}>
+              <Icon name="angle-left" size={24} />
+            </TouchableOpacity>
+          )}
+        </View>
+        <View style={styles.title}>
+          <Text>{title}</Text>
+        </View>
+        <View style={styles.right} />
+      </View>
+    );
+  }
+}
+
+export default withNavigation(Header);

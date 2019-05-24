@@ -36,7 +36,7 @@ class RepositoryItem extends Component {
     const { repository } = this.props;
     return (
       <TouchableOpacity onPress={this.openIssues}>
-        <View style={styles.constainer}>
+        <View style={styles.container}>
           <Image style={styles.avatar} source={{ uri: repository.owner.avatar_url }} />
 
           <View style={styles.info}>
