@@ -23,18 +23,21 @@ export default class Issues extends Component {
     loading: true,
     error: '',
     refreshing: false,
+    activeFilter: 'all',
   };
 
   async componentDidMount() {
     this.loadIssues();
   }
 
-  loadIssues = async () => {
+  loadIssues = async (state = 'all') => {
     const { navigation } = this.props;
-    this.setState({ refreshing: true });
+    this.setState({ refreshing: true, activeFilter: state });
+
+    const stateFilter = `?state=${state}`;
 
     try {
-      const { data } = await api.get(`/repos/${navigation.getParam('full_name')}/issues`);
+      const { data } = await api.get(`/repos/${navigation.getParam('full_name')}/issues${stateFilter}`);
 
       this.setState({ issues: data });
     } catch (error) {
@@ -63,26 +66,26 @@ export default class Issues extends Component {
         />
       );
     }
-    return <Text>Não há issues para esse repositório</Text>
+    return <Text>Não há issues para esse repositório</Text>;
   };
 
   renderListItem = ({ item }) => <IssuesItems issue={item} />;
 
   render() {
-    const { loading } = this.state;
+    const { loading, activeFilter } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.buttons}>
-          <TouchableOpacity onPress={() => {}}>
-            <Text style={styles.all}>Todos</Text>
+          <TouchableOpacity style={styles.buttonContainer} onPress={() => this.loadIssues('all')}>
+            <Text style={[styles.buttonText, activeFilter === 'all' && styles.activeFilter]}>Todos</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => {}}>
-            <Text style={styles.opened}>Abertas</Text>
+          <TouchableOpacity style={styles.buttonContainer} onPress={() => this.loadIssues('open')}>
+            <Text style={[styles.buttonText, activeFilter === 'open' && styles.activeFilter]}>Abertas</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => {}}>
-            <Text style={styles.closed}>Fecahdas</Text>
+          <TouchableOpacity style={styles.buttonContainer} onPress={() => this.loadIssues('closed')}>
+            <Text style={[styles.buttonText, activeFilter === 'closed' && styles.activeFilter]}>Fecahdas</Text>
           </TouchableOpacity>
         </View>
 

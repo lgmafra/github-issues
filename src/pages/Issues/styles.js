@@ -17,8 +17,22 @@ const styles = StyleSheet.create({
     margin: metrics.baseMargin,
     height: 48,
     alignItems: 'center',
-    paddingLeft: metrics.basePadding + 10,
-    paddingRight: metrics.basePadding + 10,
+  },
+
+  buttonContainer: {
+    alignItems: 'center',
+    flex: 1,
+  },
+
+  buttonText: {
+    color: colors.regular,
+    fontSize: 14,
+  },
+
+  activeFilter: {
+    color: colors.dark,
+    fontSize: 15,
+    fontWeight: 'bold',
   },
 });
 
