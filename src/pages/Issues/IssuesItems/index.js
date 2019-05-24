@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
+import { withNavigation } from 'react-navigation';
 
 import styles from './styles';
 
@@ -17,12 +18,17 @@ class IssuesItems extends Component {
     }),
   }).isRequired;
 
-  openIssuePage = () => {};
+  openIssuePage = (issue) => {
+    const { navigation } = this.props;
+    navigation.navigate('IssuePage', {
+      issue,
+    });
+  };
 
   render() {
     const { issue } = this.props;
     return (
-      <TouchableOpacity onPress={this.openIssuePage}>
+      <TouchableOpacity onPress={() => this.openIssuePage(issue)}>
         <View style={styles.container}>
           <Image style={styles.avatar} source={{ uri: issue.user.avatar_url }} />
           <View style={styles.info}>
@@ -41,4 +47,4 @@ class IssuesItems extends Component {
   }
 }
 
-export default IssuesItems;
+export default withNavigation(IssuesItems);
